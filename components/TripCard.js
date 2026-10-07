@@ -1,22 +1,30 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
+import { format, parseISO } from "date-fns";
+import { fr } from "date-fns/locale";
 
 export default function TripCard({ trip }) {
-return (
-        <Pressable
-      onPress={() => console.log("Trajet sélectionné : " + trip.departure + " → " + trip.arrival)}>
-<View style={styles.card}>
-<View style={styles.row}>
-<Text style={styles.route}>
-{trip.departure} → {trip.arrival}
-</Text>
-<Text style={styles.price}>{trip.price} €</Text>
-</View>
-<Text>{trip.date} - {trip.time}</Text>
-<Text>Nombre de places : {trip.seatsAvailable}</Text>
-<Text>Nom du conducteur : {trip.driver.name}</Text>
-</View>
-</Pressable>
-);
+  const departure = parseISO(`${trip.date}T${trip.time}:00`);
+  const dateLabel = format(departure, "EEEE d MMM 'à' HH'h'mm", {
+    locale: fr,
+  });
+
+  return (
+    <Pressable
+      onPress={() => console.log("Trajet sélectionné : " + trip.departure + " → " + trip.arrival)}
+    >
+      <View style={styles.card}>
+        <View style={styles.row}>
+          <Text style={styles.route}>
+            {trip.departure} → {trip.arrival}
+          </Text>
+          <Text style={styles.price}>{trip.price} €</Text>
+        </View>
+        <Text>{dateLabel}</Text>
+        <Text>Nombre de places : {trip.seatsAvailable}</Text>
+        <Text>Nom du conducteur : {trip.driver.name}</Text>
+      </View>
+    </Pressable>
+  );
 }
 const styles = StyleSheet.create({
   card: {
